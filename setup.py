@@ -6,11 +6,21 @@ Created on Fri Jan 12 06:18:23 2018
 @author: danw
 """
 
+try:
+    from pyqt_distutils.build_ui import build_ui
+    cmdclass = {"build_ui" : build_ui}
+except ImportError:
+    build_ui = None
+    cmdclass = {}
+
+
+
 from distutils.core import setup
 
 setup(
       name="kicad_backannotate",
       version="0.0.1dev",
-      packages=["kicad_backannotate"]
+      packages=["kicad_backannotate"],
+      cmdclass = cmdclass
       
       )
