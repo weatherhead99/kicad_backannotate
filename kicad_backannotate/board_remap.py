@@ -40,6 +40,16 @@ class BoardRemapper(object):
         
         return mapping
             
+def sorted_string_remapping(mapping):
+    out_old = []
+    out_new = []
+    
+    for modtype in sorted(mapping.keys()):
+        modmap = mapping[modtype]
+        out_old.extend(_reference_to_str(modtype,_) for _ in modmap.keys())
+        out_new.extend(_reference_to_str(modtype,_) for _ in modmap.values())
+    
+    return out_old, out_new
     
 def string_remapping(mapping):
     out = {}

@@ -18,26 +18,62 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QPushButton" name="writeSchematicButton">
+       <widget class="QPushButton" name="loadBoardButton">
         <property name="text">
          <string>Load Board</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="loadBoardButton">
+       <widget class="QPushButton" name="prepareSchematicButton">
         <property name="text">
-         <string>Save Schematic</string>
+         <string>prepare schematic update</string>
         </property>
        </widget>
       </item>
      </layout>
     </item>
     <item>
-     <widget class="QColumnView" name="remapView"/>
+     <widget class="QComboBox" name="sortOrder">
+      <item>
+       <property name="text">
+        <string>sort by x then y</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>sort by y then x</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTableView" name="remapView">
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QTextBrowser" name="logView"/>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QPushButton" name="commitboardbutton">
+        <property name="text">
+         <string>commit board</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="writeSchematicButton">
+        <property name="text">
+         <string>commit schematic</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
