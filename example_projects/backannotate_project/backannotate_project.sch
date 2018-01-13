@@ -1,0 +1,176 @@
+EESchema Schematic File Version 4
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L device:R R1
+U 1 1 5A5A4B86
+P 3950 2600
+F 0 "R1" H 4020 2646 50  0000 L CNN
+F 1 "R" H 4020 2555 50  0000 L CNN
+F 2 "Resistors_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 3880 2600 50  0001 C CNN
+F 3 "" H 3950 2600 50  0001 C CNN
+	1    3950 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:R R2
+U 1 1 5A5A4BB9
+P 4600 2600
+F 0 "R2" H 4670 2646 50  0000 L CNN
+F 1 "R" H 4670 2555 50  0000 L CNN
+F 2 "Resistors_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 4530 2600 50  0001 C CNN
+F 3 "" H 4600 2600 50  0001 C CNN
+	1    4600 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:R R3
+U 1 1 5A5A4BEF
+P 5300 2600
+F 0 "R3" H 5370 2646 50  0000 L CNN
+F 1 "R" H 5370 2555 50  0000 L CNN
+F 2 "Resistors_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5230 2600 50  0001 C CNN
+F 3 "" H 5300 2600 50  0001 C CNN
+	1    5300 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:R R4
+U 1 1 5A5A4C29
+P 5900 2600
+F 0 "R4" H 5970 2646 50  0000 L CNN
+F 1 "R" H 5970 2555 50  0000 L CNN
+F 2 "Resistors_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5830 2600 50  0001 C CNN
+F 3 "" H 5900 2600 50  0001 C CNN
+	1    5900 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:C C1
+U 1 1 5A5A4C8D
+P 3950 3400
+F 0 "C1" H 4065 3446 50  0000 L CNN
+F 1 "C" H 4065 3355 50  0000 L CNN
+F 2 "Capacitors_THT:C_Disc_D12.0mm_W4.4mm_P7.75mm" H 3988 3250 50  0001 C CNN
+F 3 "" H 3950 3400 50  0001 C CNN
+	1    3950 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:C C2
+U 1 1 5A5A4CCB
+P 4600 3400
+F 0 "C2" H 4715 3446 50  0000 L CNN
+F 1 "C" H 4715 3355 50  0000 L CNN
+F 2 "Capacitors_THT:C_Disc_D12.0mm_W4.4mm_P7.75mm" H 4638 3250 50  0001 C CNN
+F 3 "" H 4600 3400 50  0001 C CNN
+	1    4600 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:C C3
+U 1 1 5A5A4D13
+P 5300 3400
+F 0 "C3" H 5415 3446 50  0000 L CNN
+F 1 "C" H 5415 3355 50  0000 L CNN
+F 2 "Capacitors_THT:C_Disc_D12.0mm_W4.4mm_P7.75mm" H 5338 3250 50  0001 C CNN
+F 3 "" H 5300 3400 50  0001 C CNN
+	1    5300 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:C C4
+U 1 1 5A5A4D59
+P 5900 3400
+F 0 "C4" H 6015 3446 50  0000 L CNN
+F 1 "C" H 6015 3355 50  0000 L CNN
+F 2 "Capacitors_THT:C_Disc_D12.0mm_W4.4mm_P7.75mm" H 5938 3250 50  0001 C CNN
+F 3 "" H 5900 3400 50  0001 C CNN
+	1    5900 3400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3950 2750 3950 3250
+Wire Wire Line
+	4600 2750 4600 3250
+Wire Wire Line
+	5300 2750 5300 3250
+Wire Wire Line
+	5900 2750 5900 3250
+$Comp
+L power:GND #PWR02
+U 1 1 5A5A4EC2
+P 6250 4650
+F 0 "#PWR02" H 6250 4400 50  0001 C CNN
+F 1 "GND" H 6255 4477 50  0000 C CNN
+F 2 "" H 6250 4650 50  0001 C CNN
+F 3 "" H 6250 4650 50  0001 C CNN
+	1    6250 4650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6250 4650 6250 4050
+Wire Wire Line
+	6250 4050 5900 4050
+Wire Wire Line
+	5900 4050 5900 3550
+Wire Wire Line
+	5300 3550 5300 4050
+Wire Wire Line
+	5300 4050 5900 4050
+Connection ~ 5900 4050
+Wire Wire Line
+	4600 3550 4600 4050
+Wire Wire Line
+	4600 4050 5300 4050
+Connection ~ 5300 4050
+Wire Wire Line
+	3950 3550 3950 4050
+Wire Wire Line
+	3950 4050 4600 4050
+Connection ~ 4600 4050
+$Comp
+L power:+15V #PWR01
+U 1 1 5A5A5173
+P 3200 1900
+F 0 "#PWR01" H 3200 1750 50  0001 C CNN
+F 1 "+15V" H 3215 2073 50  0000 C CNN
+F 2 "" H 3200 1900 50  0001 C CNN
+F 3 "" H 3200 1900 50  0001 C CNN
+	1    3200 1900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3200 1900 3200 2250
+Wire Wire Line
+	3200 2250 3950 2250
+Wire Wire Line
+	3950 2250 3950 2450
+Wire Wire Line
+	3950 2250 4600 2250
+Wire Wire Line
+	4600 2250 4600 2450
+Connection ~ 3950 2250
+Wire Wire Line
+	4600 2250 5300 2250
+Wire Wire Line
+	5300 2250 5300 2450
+Connection ~ 4600 2250
+Wire Wire Line
+	5300 2250 5900 2250
+Wire Wire Line
+	5900 2250 5900 2450
+Connection ~ 5300 2250
+$EndSCHEMATC
