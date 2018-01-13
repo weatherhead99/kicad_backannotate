@@ -58,16 +58,22 @@ class BackAnnotateMainWindow(QMainWindow):
         self.ui.commitboardbutton.pressed.connect(self.commitBoard)
         self.ui.writeSchematicButton.pressed.connect(self.commitSchematic)
         
+        self.ui.inchRadio.toggled.connect(self.unitsChanged)
+        self.ui.mmRadio.toggled.connect(self.unitsChanged)
+        
+        
         units = self.get_lastunits()
         if not units:
             self.ui.mmRadio.setChecked(True)
         else:
             self.ui.inchRadio.setChecked(True)
         
-    def loadBoard(self):
+    def loadBoard(self, checked, filename=None):
+        print(filename)
         lastdir = self.get_lastdir()
-        filename,_ = QFileDialog.getOpenFileName(self,"select board file",
-                                                 lastdir,_KICAD_BOARD_FILTER)
+        if filename is None:
+            filename,_ = QFileDialog.getOpenFileName(self,"select board file",
+                                                    lastdir,_KICAD_BOARD_FILTER)
                 
         if len(filename) == 0:
             return
@@ -76,6 +82,7 @@ class BackAnnotateMainWindow(QMainWindow):
                                  self.style())
         
         self.ui.remapView.setModel(self._model)
+        self.ui.remapView.selectionModel().currentChanged.connect(self.componentSelected)
 
         
         self.settings.setValue("lastVisitedDir",os.path.dirname(filename))
@@ -83,17 +90,13 @@ class BackAnnotateMainWindow(QMainWindow):
         self.ui.prepareSchematicButton.setEnabled(True)
         self.statusBar().showMessage("Board loaded OK")        
         self.ui.remapView.resizeColumnsToContents()
-        
-        self.ui.remapView.selectionModel().currentChanged.connect(self.componentSelected)
-        
-        self.ui.inchRadio.toggled.connect(self.unitsChanged)
-        self.ui.mmRadio.toggled.connect(self.unitsChanged)
-        
         self.ui.commitboardbutton.setEnabled(True)
         
-    def prepareSchematic(self):
+    def prepareSchematic(self,  filename=None):
         lastdir = self.get_lastdir()
-        filename,_ = QFileDialog.getOpenFileName(self,"select schematic file",
+        
+        if filename is None:
+            filename,_ = QFileDialog.getOpenFileName(self,"select schematic file",
                                                  lastdir, _KICAD_SCHEM_FILTER)
         
         if len(filename) == 0:
@@ -135,6 +138,9 @@ class BackAnnotateMainWindow(QMainWindow):
         return units
         
     def componentSelected(self,index,previous):
+        if not hasattr(self, "_model"):
+            return
+        
         props = self._model.getProperties(index)
         
         #mm
@@ -158,6 +164,9 @@ class BackAnnotateMainWindow(QMainWindow):
         
 
     def unitsChanged(self,toggleval):
+        if not hasattr(self, "x_mm"):
+            return
+        
         if self.ui.mmRadio.isChecked():
             self.ui.xvalue.setNum( self.x_mm)
             self.ui.yvalue.setNum(self.y_mm)
