@@ -2,9 +2,12 @@ import unittest
 from kicad_backannotate.board_remap import BoardRemapper,  sort_by_x_then_y,  string_remapping
 import os
 import pcbnew
+from pkg_resources import resource_filename
+
 
 #TODO: put example project in package
-BOARD_FILE="/home/danw/Software/kicad_backannotate/example_project/backannotate_project/backannotate_project.kicad_pcb"
+BOARD_FILE=resource_filename("kicad_backannotate.test","test_data/backannotate_project/backannotate_project.kicad_pcb")
+
 
 class TestBoardRemapper(unittest.TestCase):
     def setUp(self):
@@ -40,4 +43,4 @@ class TestBoardRemapper(unittest.TestCase):
         
         
 if __name__ == "__main__":
-    unittest.main()
+    print(BOARD_FILE)

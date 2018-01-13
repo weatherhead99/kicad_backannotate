@@ -28,13 +28,15 @@ from setuptools import setup, find_packages
 setup(
       name="kicad_backannotate",
       version="0.0.1",
-      packages=find_packages(),
+      packages=find_packages(exclude="test"),
       license = "GPL-3.0-or-later", 
       url= "https://github.com/weatherhead99/kicad_backannotate", 
       author="Dan Weatherill", 
       author_email="plasteredparrot@gmail.com", 
       entry_points={
             "gui_scripts": [ 
-            "kicad_backannotate_gui = kicad_backannotate.gui.kicad_backannotate_gui.main"]}
+            "kicad_backannotate_gui = kicad_backannotate.gui.kicad_backannotate_gui.main"]}, 
+        test_suite="kicad_backannotate.test", 
+        package_data = { "kicad_backannotate.test_data" : ["example_projects/backannotate_project/backannotate_project.kicad_pcb"]}
       
       )
