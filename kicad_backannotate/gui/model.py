@@ -6,8 +6,8 @@ Created on Fri Jan 12 07:30:24 2018
 @author: danw
 """
 
-from PyQt5.QtCore import QAbstractTableModel, QVariant, Qt
-
+from PyQt5.QtCore import QAbstractTableModel, QVariant, Qt, QModelIndex
+from PyQt5.QtWidgets import QStyle
 
 import sys
 sys.path.append("/home/danw/Software/kicad_backannotate/")
@@ -19,11 +19,11 @@ from kicad_backannotate.board_remap import BoardRemapper,sort_by_x_then_y, sorte
 
 
 class RemapTable(QAbstractTableModel):
-    def __init__(self,board_file,sortindex):
+    def __init__(self,board_file,sortindex,style=None):
         super(RemapTable,self).__init__()
         self._remapper = BoardRemapper(boardfile=board_file)
         self.resortdata(sortindex)
-        
+        self._style = style
         
     def resortdata(self,sortindex):
         self.beginResetModel()
@@ -37,8 +37,8 @@ class RemapTable(QAbstractTableModel):
 
         
     def flags(self,index):
-        return Qt.ItemFlags(32 | 1)
-
+        return Qt.ItemFlags(128 |32 | 1)
+        
         
     def headerData(self,section, orientation, role):
         if orientation == Qt.Horizontal and role == Qt.DisplayRole:
@@ -46,6 +46,10 @@ class RemapTable(QAbstractTableModel):
                 return QVariant("old reference")
             elif section == 1:
                 return QVariant("new reference")
+            elif section == 2:
+                if hasattr(self,"_donemap"):
+                    return QVariant("found in schematic")
+        
         elif orientation == Qt.Vertical:
             return None
         
@@ -53,7 +57,10 @@ class RemapTable(QAbstractTableModel):
         return len(self._oldvals)
     
     def columnCount(self,parent):
-        return 2
+        if not hasattr(self,"_donemap"):
+            return 2
+        else:
+            return 3
     
     
     def data(self, index, role):
@@ -62,7 +69,49 @@ class RemapTable(QAbstractTableModel):
                 return self._oldvals[index.row()]
             elif index.column() == 1:
                 return self._newvals[index.row()]
-            
+            elif index.column() == 2:                
+                return None
             raise IndexError("invalid index supplied")
+        elif role == Qt.CheckStateRole:
+            if self._style is not None:
+                return None
+            if index.column() == 2:
+                if self._oldvals[index.row()] in self._donemap:
+                    return 2
+                return 0
+            else:
+                return None
+        elif role == Qt.DecorationRole:
+            if self._style is None:
+                return None
+            if index.column() == 2:
+                if self._oldvals[index.row()] in self._donemap:
+                    return self._style.standardIcon(QStyle.SP_DialogApplyButton)
+                else:
+                    return self._style.standardIcon(QStyle.SP_DialogCancelButton)
         else:
             return None
+        
+    def showSchematicStatus(self,remap, done):
+        if self.columnCount(None) == 2:
+            self.beginInsertColumns(QModelIndex(),2,2)
+            self._donemap = done
+            self.endInsertColumns()
+            
+        else:
+            self.beginResetModel()
+            self._donemap = done
+            self.endResetModel()
+            
+    
+    def getProperties(self,index):
+        oldval = self._oldvals[index.row()]
+        x,y = self._remapper.get_location(oldval)
+        tstamp = self._remapper.get_tstamp(oldval)
+        libid = self._remapper.get_libitem(oldval)
+        
+        props = {"x" : x, "y" : y, "tstamp" : tstamp,
+                 "libid" : libid}
+        
+        return props
+            

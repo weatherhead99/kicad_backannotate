@@ -20,7 +20,8 @@ from distutils.core import setup
 setup(
       name="kicad_backannotate",
       version="0.0.1dev",
-      packages=["kicad_backannotate"],
+      packages=["kicad_backannotate", "kicad_backannotate.gui"],
+      scripts=["kicad_backannotate/gui/main.py"],
       cmdclass = cmdclass
       
       )

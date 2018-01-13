@@ -20,16 +20,24 @@ class BoardRemapper(object):
     
     def _load_original_board_geometry(self,locfun):
         self._boardlocations = {}
+        self._boardtstamps = {}
+        self._boardlibnames = {}
         modtypes = set([])
         modules = self._board.GetModules()
         for mod in modules:
             centre = locfun(mod)
+            tstamp = mod.GetTimeStamp()
+            libitem = mod.GetFPID().GetLibItemName()
             modtype, modnumber = _parse_reference(mod.GetReference())
             if modtype is not None:
                 modtypes.add(modtype)
                 if modtype not in self._boardlocations:
                     self._boardlocations[modtype] = {}
+                    self._boardtstamps[modtype] = {}
+                    self._boardlibnames[modtype] = {}
                 self._boardlocations[modtype][modnumber] = centre[0],centre[1]
+                self._boardtstamps[modtype][modnumber] = tstamp
+                self._boardlibnames[modtype][modnumber]= libitem
 
     def get_remapping(self,sortfun):
         mapping = {}
@@ -39,6 +47,27 @@ class BoardRemapper(object):
             mapping[modtype] = {_ : __ for _, __ in zip(geomsort,numsort)}
         
         return mapping
+    
+    def get_location(self,designator):
+        if isinstance(designator,unicode):
+            mt,mn = _parse_reference(designator)
+            return self._boardlocations[mt][mn]
+        else:
+            raise TypeError("require unicode not %s" % type(designator)) 
+            
+    def get_tstamp(self,designator):
+        if isinstance(designator,unicode):
+            mt,mn = _parse_reference(designator)
+            return self._boardtstamps[mt][mn]
+        else:
+            raise TypeError("require unicode not %s" % type(designator)) 
+    
+    def get_libitem(self,designator):
+        if isinstance(designator,unicode):
+            mt,mn = _parse_reference(designator)
+            return self._boardlibnames[mt][mn]
+        else:
+            raise TypeError("require unicode not %s" % type(designator))
             
 def sorted_string_remapping(mapping):
     out_old = []

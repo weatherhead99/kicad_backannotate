@@ -18,6 +18,8 @@ sys.path.append("/home/danw/Software/kicad_backannotate/")
 from kicad_backannotate.schematic_updater import SchematicUpdater, get_remaining
 from kicad_backannotate.board_remap import string_remapping
 
+INCH_TO_MM = 0.0393701
+
 class BackAnnotateMainWindow(QMainWindow):
     def __init__(self):
         super(BackAnnotateMainWindow,self).__init__()
@@ -33,6 +35,13 @@ class BackAnnotateMainWindow(QMainWindow):
         self.ui.writeSchematicButton.setEnabled(False)
         self.show()
         
+        units = self.get_lastunits()
+        if not units:
+            self.ui.mmRadio.setChecked(True)
+        else:
+            self.ui.inchRadio.setChecked(True)
+            
+        
 
         
     def loadBoard(self):
@@ -43,16 +52,22 @@ class BackAnnotateMainWindow(QMainWindow):
         if len(filename) == 0:
             return
         
-        self._model = RemapTable(filename,self.ui.sortOrder.currentIndex())
+        self._model = RemapTable(filename,self.ui.sortOrder.currentIndex(),
+                                 self.style())
+        
         self.ui.remapView.setModel(self._model)
+
         
         self.settings.setValue("lastVisitedDir",os.path.dirname(filename))
-        
         self.ui.sortOrder.currentIndexChanged.connect(self._model.resortdata)
-        
         self.ui.prepareSchematicButton.setEnabled(True)
-        self.statusBar().showMessage("Board loaded OK")
+        self.statusBar().showMessage("Board loaded OK")        
+        self.ui.remapView.resizeColumnsToContents()
         
+        self.ui.remapView.selectionModel().currentChanged.connect(self.componentSelected)
+        
+        self.ui.inchRadio.toggled.connect(self.unitsChanged)
+        self.ui.mmRadio.toggled.connect(self.unitsChanged)
         
     def prepareSchematic(self):
         lastdir = self.get_lastdir()
@@ -66,6 +81,16 @@ class BackAnnotateMainWindow(QMainWindow):
         stremap = string_remapping(self._model.remap)
         done = self._updater.recursive_remap(stremap)
         
+        if len(done) != len(stremap):
+            self.statusBar().showMessage("WARNING: some symbols not found!")
+            self._allsymsfound = False
+        else:
+            self.statusBar().showMessage("Schematic loaded OK, all symbols found")
+            self._allsymsfound = True
+        self.ui.loadBoardButton.setEnabled(False)
+        self.ui.sortOrder.setEnabled(False)
+        self._model.showSchematicStatus(stremap,done)
+        self.ui.remapView.resizeColumnsToContents()
         
     def get_lastdir(self):
         lastdir_variant=self.settings.value("lastVisitedDir")
@@ -75,6 +100,37 @@ class BackAnnotateMainWindow(QMainWindow):
             lastdir = str(lastdir_variant)
         
         return lastdir
+
+    def get_lastunits(self):
+        units_variant = self.settings.value("lastUnits")
+        units = 0 if not units_variant else int(units_variant)
+        return units
+        
+    def componentSelected(self,index,previous):
+        props = self._model.getProperties(index)
+        
+        #mm
+        self.x_mm = props["x"] / 1E6
+        self.y_mm = props["y"] / 1E6
+        
+        self.x_inch = self.x_mm * INCH_TO_MM
+        self.y_inch = self.y_mm * INCH_TO_MM
+            
+        self.unitsChanged(None)
+        self.ui.timestampvalue.setNum(props["tstamp"])
+        self.ui.footprintvalue.setText(str(props["libid"]))
+
+    def unitsChanged(self,toggleval):
+        if self.ui.mmRadio.isChecked():
+            self.ui.xvalue.setNum( self.x_mm)
+            self.ui.yvalue.setNum(self.y_mm)
+            self.settings.setValue("lastUnits", 0)
+        else:
+            self.ui.xvalue.setNum( self.x_inch)
+            self.ui.yvalue.setNum(self.y_inch)
+            self.settings.setValue("lastUnits",1)
+        
+        
 
 
 
