@@ -21,22 +21,20 @@ Created on Fri Jan 12 06:18:23 2018
 @author: danw
 """
 
-try:
-    from pyqt_distutils.build_ui import build_ui
-    cmdclass = {"build_ui" : build_ui}
-except ImportError:
-    build_ui = None
-    cmdclass = {}
 
 
-
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
       name="kicad_backannotate",
-      version="0.0.1dev",
-      packages=["kicad_backannotate", "kicad_backannotate.gui"],
-      scripts=["kicad_backannotate/gui/kicad_backannotate_gui.py"],
-      cmdclass = cmdclass
+      version="0.0.1",
+      packages=find_packages(exclude="tests"),
+      license = "GPL-3.0-or-later", 
+      url= "https://github.com/weatherhead99/kicad_backannotate", 
+      author="Dan Weatherill", 
+      author_email="plasteredparrot@gmail.com", 
+      entry_points={
+            "gui_scripts": [ 
+            "kicad_backannotate_gui = kicad_backannotate.gui.kicad_backannotate_gui.main"]}
       
       )
