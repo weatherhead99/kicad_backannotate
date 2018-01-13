@@ -28,7 +28,7 @@ from setuptools import setup, find_packages
 setup(
       name="kicad_backannotate",
       version="0.0.1",
-      packages=find_packages(exclude="tests"),
+      packages=find_packages(),
       license = "GPL-3.0-or-later", 
       url= "https://github.com/weatherhead99/kicad_backannotate", 
       author="Dan Weatherill", 
