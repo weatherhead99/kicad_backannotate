@@ -1,11 +1,5 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Jan 12 06:28:53 2018
-
-@author: danw
-"""
-
 #    This file is part of kicad_backannotator
 #
 #    kicad_backannotator is free software: you can redistribute it and/or modify
@@ -20,6 +14,13 @@ Created on Fri Jan 12 06:28:53 2018
 #
 #    You should have received a copy of the GNU General Public License
 #    along with kicad_backannotator.  If not, see <http://www.gnu.org/licenses/>.
+
+"""
+Created on Fri Jan 12 06:28:53 2018
+
+@author: danw
+"""
+
 
 from ui_main import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QWidget
