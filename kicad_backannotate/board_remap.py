@@ -69,6 +69,20 @@ class BoardRemapper(object):
         else:
             raise TypeError("require unicode not %s" % type(designator))
             
+    def change_board_references(self,mapping):
+        for modtype in mapping:
+            for oldnum,newnum in mapping[modtype].items():
+                print(_reference_to_str(modtype,oldnum))
+                print(_reference_to_str(modtype,newnum))
+                boardmod = self._board.FindModule(_reference_to_str(modtype,int(oldnum)))
+                boardmod.SetReference(_reference_to_str(modtype,int(newnum)))
+                boardmod.SetModified()
+    
+    def save_board(self,fname):
+        self._board.Save(fname)
+    
+    
+    
 def sorted_string_remapping(mapping):
     out_old = []
     out_new = []

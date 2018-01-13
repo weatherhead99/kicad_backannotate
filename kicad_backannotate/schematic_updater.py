@@ -26,6 +26,7 @@ class SchematicUpdater(object):
             raise RuntimeError("couldn't open schematic file")        
         self._sheet_counts = self.get_sheet_counts()
         self._edited_schematics = {}
+        self.found_in_schematic = {}
         
     @property
     def edited_schematics(self):
@@ -46,7 +47,8 @@ class SchematicUpdater(object):
                 if designator not in remapped.keys():
                     remapped[designator] = mapping[designator]
                     comp.fields[0]["ref"] = '"%s' % mapping[designator]
-            
+                if designator not in self.found_in_schematic:
+                    self.found_in_schematic[designator] = schematic.filename
             if len(comp.references) > 0:
                 for ref in comp.references:
                     refdesig = splitrefkv(ref["ref"])

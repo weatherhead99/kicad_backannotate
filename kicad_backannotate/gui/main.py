@@ -20,6 +20,9 @@ from kicad_backannotate.board_remap import string_remapping
 
 INCH_TO_MM = 0.0393701
 
+_KICAD_BOARD_FILTER = "pcbnew board (*.kicad_pcb)"
+_KICAD_SCHEM_FILTER = "eeschema schematic (*.sch)"
+
 class BackAnnotateMainWindow(QMainWindow):
     def __init__(self):
         super(BackAnnotateMainWindow,self).__init__()
@@ -35,6 +38,11 @@ class BackAnnotateMainWindow(QMainWindow):
         self.ui.writeSchematicButton.setEnabled(False)
         self.show()
         
+        self.ui.schGroup.hide()
+        
+        self.ui.commitboardbutton.setEnabled(False)
+        self.ui.commitboardbutton.pressed.connect(self.commitBoard)
+        
         units = self.get_lastunits()
         if not units:
             self.ui.mmRadio.setChecked(True)
@@ -47,7 +55,7 @@ class BackAnnotateMainWindow(QMainWindow):
     def loadBoard(self):
         lastdir = self.get_lastdir()
         filename,_ = QFileDialog.getOpenFileName(self,"select board file",
-                                                 lastdir,"pcbnew board (*.kicad_pcb)")
+                                                 lastdir,_KICAD_BOARD_FILTER)
                 
         if len(filename) == 0:
             return
@@ -72,7 +80,7 @@ class BackAnnotateMainWindow(QMainWindow):
     def prepareSchematic(self):
         lastdir = self.get_lastdir()
         filename,_ = QFileDialog.getOpenFileName(self,"select schematic file",
-                                                 lastdir, "eeschema schematic (*.sch)")
+                                                 lastdir, _KICAD_SCHEM_FILTER)
         
         if len(filename) == 0:
             return
@@ -91,6 +99,9 @@ class BackAnnotateMainWindow(QMainWindow):
         self.ui.sortOrder.setEnabled(False)
         self._model.showSchematicStatus(stremap,done)
         self.ui.remapView.resizeColumnsToContents()
+        self.ui.schGroup.show()
+        
+        self.ui.commitboardbutton.setEnabled(True)
         
     def get_lastdir(self):
         lastdir_variant=self.settings.value("lastVisitedDir")
@@ -119,6 +130,13 @@ class BackAnnotateMainWindow(QMainWindow):
         self.unitsChanged(None)
         self.ui.timestampvalue.setNum(props["tstamp"])
         self.ui.footprintvalue.setText(str(props["libid"]))
+        
+        desig = self._model._oldvals[index.row()]
+        if hasattr(self,"_updater"):
+            if desig in self._updater.found_in_schematic:
+                fname = os.path.basename(self._updater.found_in_schematic[desig])
+                self.ui.schfilevalue.setText(fname)
+        
 
     def unitsChanged(self,toggleval):
         if self.ui.mmRadio.isChecked():
@@ -130,9 +148,14 @@ class BackAnnotateMainWindow(QMainWindow):
             self.ui.yvalue.setNum(self.y_inch)
             self.settings.setValue("lastUnits",1)
         
+    def commitBoard(self):
+        lastdir = self.get_lastdir()
+        self._model._remapper.change_board_references(self._model.remap)
         
+        savename, _ = QFileDialog.getSaveFileName(self,"select output board file",
+                                                  lastdir,_KICAD_BOARD_FILTER)
 
-
+        self._model._remapper.save_board(savename)
 
 if __name__ == "__main__":
     
