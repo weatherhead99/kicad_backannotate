@@ -36,7 +36,7 @@ setup(
       name="kicad_backannotate",
       version="0.0.1dev",
       packages=["kicad_backannotate", "kicad_backannotate.gui"],
-      scripts=["kicad_backannotate/gui/main.py"],
+      scripts=["kicad_backannotate/gui/kicad_backannotate_gui.py"],
       cmdclass = cmdclass
       
       )
