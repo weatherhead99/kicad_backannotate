@@ -28,8 +28,6 @@ from PyQt5.QtCore import QSettings
 import sys
 import os
 from model import RemapTable
-
-sys.path.append("/home/danw/Software/kicad_backannotate/")
 from kicad_backannotate.schematic_updater import SchematicUpdater
 from kicad_backannotate.board_remap import string_remapping
 
