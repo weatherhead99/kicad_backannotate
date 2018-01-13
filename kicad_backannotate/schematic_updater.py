@@ -35,7 +35,7 @@ class SchematicUpdater(object):
             raise RuntimeError("couldn't open schematic file")        
         self._sheet_counts = self.get_sheet_counts()
         self._edited_schematics = {}
-        self.found_in_schematic = {}
+        self.found_in_schematic_file = {}
         
     @property
     def edited_schematics(self):
@@ -55,9 +55,10 @@ class SchematicUpdater(object):
                 print("remapping: %s -> %s" % (designator,mapping[designator]))
                 if designator not in remapped.keys():
                     remapped[designator] = mapping[designator]
-                    comp.fields[0]["ref"] = '"%s' % mapping[designator]
-                if designator not in self.found_in_schematic:
-                    self.found_in_schematic[designator] = schematic.filename
+                    comp.fields[0]["ref"] = '"%s"' % mapping[designator]
+                    comp.labels["ref"] = mapping[designator]
+                if designator not in self.found_in_schematic_file:
+                    self.found_in_schematic_file[designator] = schematic.filename
             if len(comp.references) > 0:
                 for ref in comp.references:
                     refdesig = splitrefkv(ref["ref"])
@@ -67,6 +68,8 @@ class SchematicUpdater(object):
                             if refdesig not in remapped.keys():
                                 remapped[refdesig] = mapping[designator]
                                 ref["ref"] = joinrefkv(mapping[refdesig])
+                            if refdesig not in self.found_in_schematic_file:
+                                self.found_in_schematic_file[refdesig] = schematic.filename
                         else:
                             print("rmapping reference %s" % refdesig)
                             ref["ref"] = joinrefkv(mapping[refdesig])
@@ -133,6 +136,32 @@ class SchematicUpdater(object):
             self._done_sheets = []
         
         return done
+    
+    def recursive_sheet_rename(self, fname_ext, schematic=None):
+        if schematic is None:
+            schematic = self._schematic
+        if not isinstance(schematic, Schematic):
+            raise TypeError("require Schematic object")
+        
+        for sheet in schematic.sheets:
+            old_fname = sheet.fields[1]["value"].strip('"')
+            basename, ext = os.path.splitext(old_fname)
+            new_fname = basename + fname_ext + ext
+            sheet.fields[1]["value"] = '"%s"' % new_fname
+            dr = os.path.dirname(os.path.abspath(self._sch_file))
+            print(self._edited_schematics)
+            subschem = self._edited_schematics[os.path.join(dr, old_fname)]
+            print("renamed %s to %s in sheet %s" % (old_fname,  new_fname, sheet.fields[0]["value"] ))
+            self.recursive_sheet_rename(fname_ext, schematic=subschem)
+    
+    def save_changes(self, fname_ext):
+        self.recursive_sheet_rename(fname_ext)
+        for filename, schem in self.edited_schematics.items():
+            basename, ext = os.path.splitext(filename)
+            print(basename)
+            print(fname_ext)
+            new_fname = basename+ fname_ext + ext
+            schem.save(filename=new_fname)
 
 def get_remaining(remap, done):
     return {k:v for k,v in remap.items() if k not in done.keys()}

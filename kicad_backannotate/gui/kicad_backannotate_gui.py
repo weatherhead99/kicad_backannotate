@@ -23,7 +23,7 @@ Created on Fri Jan 12 06:28:53 2018
 
 
 from Ui_main import Ui_MainWindow
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog,  QInputDialog
 from PyQt5.QtCore import QSettings
 import sys
 import os
@@ -56,7 +56,9 @@ class BackAnnotateMainWindow(QMainWindow):
         self.ui.schGroup.hide()
         
         self.ui.commitboardbutton.setEnabled(False)
+        self.ui.writeSchematicButton.setEnabled(False)
         self.ui.commitboardbutton.pressed.connect(self.commitBoard)
+        self.ui.writeSchematicButton.pressed.connect(self.commitSchematic)
         
         units = self.get_lastunits()
         if not units:
@@ -89,6 +91,8 @@ class BackAnnotateMainWindow(QMainWindow):
         self.ui.inchRadio.toggled.connect(self.unitsChanged)
         self.ui.mmRadio.toggled.connect(self.unitsChanged)
         
+        self.ui.commitboardbutton.setEnabled(True)
+        
     def prepareSchematic(self):
         lastdir = self.get_lastdir()
         filename,_ = QFileDialog.getOpenFileName(self,"select schematic file",
@@ -107,6 +111,8 @@ class BackAnnotateMainWindow(QMainWindow):
         else:
             self.statusBar().showMessage("Schematic loaded OK, all symbols found")
             self._allsymsfound = True
+            self.ui.writeSchematicButton.setEnabled(True)
+            
         self.ui.loadBoardButton.setEnabled(False)
         self.ui.sortOrder.setEnabled(False)
         self._model.showSchematicStatus(stremap,done)
@@ -114,6 +120,7 @@ class BackAnnotateMainWindow(QMainWindow):
         self.ui.schGroup.show()
         
         self.ui.commitboardbutton.setEnabled(True)
+        
         
     def get_lastdir(self):
         lastdir_variant=self.settings.value("lastVisitedDir")
@@ -145,9 +152,11 @@ class BackAnnotateMainWindow(QMainWindow):
         
         desig = self._model._oldvals[index.row()]
         if hasattr(self,"_updater"):
-            if desig in self._updater.found_in_schematic:
-                fname = os.path.basename(self._updater.found_in_schematic[desig])
+            if desig in self._updater.found_in_schematic_file:
+                fname = os.path.basename(self._updater.found_in_schematic_file[desig])
                 self.ui.schfilevalue.setText(fname)
+            else:
+                self.ui.schfilevalue.setText("")
         
 
     def unitsChanged(self,toggleval):
@@ -167,10 +176,20 @@ class BackAnnotateMainWindow(QMainWindow):
         savename, _ = QFileDialog.getSaveFileName(self,"select output board file",
                                                   lastdir,_KICAD_BOARD_FILTER)
                                                   
-        print("got savefile %s" % savename)
 
         self._model._remapper.save_board(savename)
-        print("save done")
+        self.statusBar().showMessage("saved output board %s" % savename)
+
+    def commitSchematic(self):
+        lastdir = self.get_lastdir()
+        ext, ok = QInputDialog.getText(self, "extension",  "select updated schematic name append",  0, "_remapped")
+        if not ok:
+            return
+        self._updater.save_changes(ext)
+        
+        self.statusBar().showMessage("saved output schematic")
+        
+        
 
 def main():
     app = QApplication(sys.argv)
