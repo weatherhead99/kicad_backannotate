@@ -92,7 +92,7 @@ class BackAnnotateMainWindow(QMainWindow):
         self.ui.remapView.resizeColumnsToContents()
         self.ui.commitboardbutton.setEnabled(True)
         
-    def prepareSchematic(self,  filename=None):
+    def prepareSchematic(self, checked,  filename=None):
         lastdir = self.get_lastdir()
         
         if filename is None:
