@@ -1,10 +1,19 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Jan 12 03:50:40 2018
-
-@author: danw
-"""
+#    This file is part of kicad_backannotator
+#
+#    kicad_backannotator is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    kicad_backannotator is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with kicad_backannotator.  If not, see <http://www.gnu.org/licenses/>.
 
 from sch import Schematic, Sheet
 import os
