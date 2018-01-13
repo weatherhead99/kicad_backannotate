@@ -26,7 +26,6 @@ from ui_main import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QWidget
 from PyQt5.QtCore import pyqtSlot, QMetaObject, QSettings
 import sys
-sys.path.append("/home/danw/Software/kicad_dist/lib/python2.7/site-packages")
 import os
 from model import RemapTable
 
@@ -173,13 +172,11 @@ class BackAnnotateMainWindow(QMainWindow):
 
         self._model._remapper.save_board(savename)
 
-if __name__ == "__main__":
-    
-    
-    
+def main():
     app = QApplication(sys.argv)
-
     mw = BackAnnotateMainWindow()
-
-    
     sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    main()

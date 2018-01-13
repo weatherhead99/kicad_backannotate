@@ -26,6 +26,7 @@ Documentation, License etc.
 
 import pcbnew
 import re
+import operator
 
 
 class BoardRemapper(object):
@@ -100,7 +101,7 @@ class BoardRemapper(object):
                 boardmod.SetModified()
     
     def save_board(self,fname):
-        self._board.Save(fname)
+        return self._board.Save(fname)
     
     
     
@@ -135,22 +136,19 @@ def _reference_to_str(tp,num):
     return "%s%d" %(tp,num)
 
 
-def getx(module_locations):
-    def f(a):
-        return module_locations[a][0]
-    return f
-
-def gety(module_locations):
-    def f(a):
-        return module_locations[a][1]
-    return f
-
 def sort_by_y_then_x(locs):
-    return sorted(sorted(locs.keys(),key=getx(locs)),key=gety(locs))
+    valsort = sorted(locs.values(),key=operator.itemgetter(1,0))
+    return [locs.keys()[locs.values().index(_)] for _ in valsort]
+
+def sort_by_y_then_x_reversed(locs):
+    return sort_by_y_then_x(locs)[::-1]
 
 def sort_by_x_then_y(locs):
-    return sorted(sorted(locs.keys(),key=gety(locs)),key=getx(locs))
+    valsort = sorted(locs.values(),key=operator.itemgetter(0,1))
+    return [locs.keys()[locs.values().index(_)] for _ in valsort]
 
+def sort_by_x_then_y_reversed(locs):
+    return sort_by_x_then_y(locs)[::-1]
 
 if __name__ == "__main__":
     import sys
@@ -158,7 +156,7 @@ if __name__ == "__main__":
     
     BOARD_FILE = "/home/danw/Documents/analog_FIR/analog_FIR.kicad_pcb"
     SCH_FILE= "/home/danw/Documents/analog_FIR/analog_FIR.sch"
-    ba = BoardRemapper(SCH_FILE,BOARD_FILE)
+    ba = BoardRemapper(BOARD_FILE)
     
     xtheny = sort_by_x_then_y(ba._boardlocations["R"])
     ythenx = sort_by_y_then_x(ba._boardlocations["R"])
