@@ -22,15 +22,15 @@ Created on Fri Jan 12 06:28:53 2018
 """
 
 
-from ui_main import Ui_MainWindow
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QWidget
-from PyQt5.QtCore import pyqtSlot, QMetaObject, QSettings
+from Ui_main import Ui_MainWindow
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
+from PyQt5.QtCore import QSettings
 import sys
 import os
 from model import RemapTable
 
 sys.path.append("/home/danw/Software/kicad_backannotate/")
-from kicad_backannotate.schematic_updater import SchematicUpdater, get_remaining
+from kicad_backannotate.schematic_updater import SchematicUpdater
 from kicad_backannotate.board_remap import string_remapping
 
 INCH_TO_MM = 0.0393701
@@ -63,9 +63,6 @@ class BackAnnotateMainWindow(QMainWindow):
             self.ui.mmRadio.setChecked(True)
         else:
             self.ui.inchRadio.setChecked(True)
-            
-        
-
         
     def loadBoard(self):
         lastdir = self.get_lastdir()
@@ -169,8 +166,11 @@ class BackAnnotateMainWindow(QMainWindow):
         
         savename, _ = QFileDialog.getSaveFileName(self,"select output board file",
                                                   lastdir,_KICAD_BOARD_FILTER)
+                                                  
+        print("got savefile %s" % savename)
 
         self._model._remapper.save_board(savename)
+        print("save done")
 
 def main():
     app = QApplication(sys.argv)

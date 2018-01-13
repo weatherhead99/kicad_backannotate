@@ -51,6 +51,7 @@ class BoardRemapper(object):
             tstamp = mod.GetTimeStamp()
             libitem = mod.GetFPID().GetLibItemName()
             modtype, modnumber = _parse_reference(mod.GetReference())
+            del mod
             if modtype is not None:
                 modtypes.add(modtype)
                 if modtype not in self._boardlocations:
@@ -60,6 +61,7 @@ class BoardRemapper(object):
                 self._boardlocations[modtype][modnumber] = centre[0],centre[1]
                 self._boardtstamps[modtype][modnumber] = tstamp
                 self._boardlibnames[modtype][modnumber]= libitem
+        del modules
 
     def get_remapping(self,sortfun):
         mapping = {}
@@ -92,14 +94,16 @@ class BoardRemapper(object):
             raise TypeError("require unicode not %s" % type(designator))
             
     def change_board_references(self,mapping):
-        for modtype in mapping:
-            for oldnum,newnum in mapping[modtype].items():
-                print(_reference_to_str(modtype,oldnum))
-                print(_reference_to_str(modtype,newnum))
-                boardmod = self._board.FindModule(_reference_to_str(modtype,int(oldnum)))
-                boardmod.SetReference(_reference_to_str(modtype,int(newnum)))
-                boardmod.SetModified()
-    
+        modules = self._board.GetModules()
+        for mod in modules:
+            ref = mod.GetReference()
+            oldtype, oldnum = _parse_reference(ref)
+            if oldtype is None:
+                #PWR symbol probably
+                continue
+            newref = mapping[oldtype][oldnum]
+            mod.SetReference(_reference_to_str(oldtype, newref))
+        
     def save_board(self,fname):
         return self._board.Save(fname)
     
