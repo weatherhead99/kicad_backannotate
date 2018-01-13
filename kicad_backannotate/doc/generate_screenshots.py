@@ -66,7 +66,7 @@ if __name__ == "__main__":
     ss_compselected.save("screenshots/mainwindow_prepareschematicbutton.png")
     
     #load the schematic
-    mw.prepareSchematic(SCH_FILE)
+    mw.prepareSchematic(False,SCH_FILE)
     mw.ui.remapView.selectRow(3)
     app.processEvents()
     
