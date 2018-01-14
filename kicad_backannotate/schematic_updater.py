@@ -91,7 +91,19 @@ class SchematicUpdater(object):
             
         return ctr
         
-            
+    def find_symbol(self, designator, schematic=None, recurse=True):
+        if schematic is None:
+            schematic = self._schematic
+        designators = [_.fields[0]["ref"].strip('"') for _ in schematic.components]
+        if designator in designators:
+            return schematic.components[designators.index(designator)]
+        elif recurse:
+            for sheet in schematic.sheets:
+                subsch = self.load_schematic_for_sheet(sheet)
+                found = self.find_symbol(designator, subsch)
+                if found is not None:
+                    return found
+        return None
     
     def get_sheet_filepath(self,sheet):
         dirname = os.path.dirname(os.path.abspath(self._sch_file))

@@ -4,8 +4,6 @@ import os
 import pcbnew
 from pkg_resources import resource_filename
 
-
-#TODO: put example project in package
 BOARD_FILE=resource_filename("kicad_backannotate.test","test_data/backannotate_project/backannotate_project.kicad_pcb")
 
 
