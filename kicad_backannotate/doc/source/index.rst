@@ -3,6 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. index:: Welcome
+
 Welcome to kicad_backannotate
 =============================
 
@@ -14,12 +16,16 @@ Kicad_backannotate is a tool which can "back annotate" a PCB design made using t
 
    tutorial
 
+.. index:: Introduction
+
 Introduction
 ============
 
 When an electronic schematic is designed, the component references (e.g R1, R2 etc for resistors) are generally numbered in accordance with being convenient to find in the schematic. It is often useful, instead, to number the references so as  to be easy to find on the final manufactured pcb (i.e. R1 is the resistor at the top left of the pcb). Kicad_backannotate currently includes a simple GUI to manage this process.
 
 Kicad_backannotate is intended to work even on complex, hierarchical schematics.
+
+.. index:: Limitations
 
 Limitations
 ===========
@@ -33,6 +39,7 @@ At present, there are two principle cases of interest not handled by kicad_backa
   Kicad_backannotate currently has no options to separately handle re-labelling components on different layers. A board with components on back and front will correctly be re-labelled by kicad_backannotate, but at present all components will be labelled using only their x and y coordinate, with no regard to which layer the component is on. This might largely defeat the purpose of back-annotation.
 
 
+.. index:: Installation
 
 Installation
 ============
@@ -43,14 +50,37 @@ The kicad_backannotate GUI uses PyQt5. You must separately install this on your 
 
 You must also have a working installation of the kicad python bindings. You can find information on installing kicad here_.
 
+After having installed the prerequisites, assuming the python2 interpreter is in your path, you can then install kicad_backannotate from the command line:
+
+.. code:: 
+
+   python setup.py install
+
+You can build this documentation using
+
+.. code:: 
+
+   python setup.py build_sphinx
+
+You should then be able to start the GUI using
+
+.. code::
+
+   kicad_backannotate_gui
 
 
-  
+.. index:: Disclaimer
+   
+Disclaimer
+==========
+
+Kicad_backannotate is in a very early stage of development. At this stage *no guarantees can be made that it will not destroy your valuable project files!*. I am not responsible for loss of your electronic designs. Please always use this tool on a backup of your project for now.
+
+   
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
 
