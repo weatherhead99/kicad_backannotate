@@ -58,7 +58,7 @@ setup(
       author_email="plasteredparrot@gmail.com", 
       entry_points={
             "gui_scripts": [ 
-            "kicad_backannotate_gui = kicad_backannotate.gui.kicad_backannotate_gui.main"]},
+            "kicad_backannotate_gui = kicad_backannotate.gui.kicad_backannotate_gui:main"]},
       cmdclass = {"screenshots" : ScreenshotsCommand},
         test_suite="kicad_backannotate.test", 
         package_data = { "kicad_backannotate.test_data" : ["example_projects/backannotate_project/backannotate_project.kicad_pcb"]
