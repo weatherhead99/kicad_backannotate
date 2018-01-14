@@ -22,12 +22,12 @@ Created on Fri Jan 12 06:28:53 2018
 """
 
 
-from Ui_main import Ui_MainWindow
+from .Ui_main import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog,  QInputDialog
 from PyQt5.QtCore import QSettings
 import sys
 import os
-from model import RemapTable
+from .model import RemapTable
 from kicad_backannotate.schematic_updater import SchematicUpdater
 from kicad_backannotate.board_remap import string_remapping
 
