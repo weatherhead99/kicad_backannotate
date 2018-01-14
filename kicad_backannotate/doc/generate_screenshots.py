@@ -71,7 +71,7 @@ if __name__ == "__main__":
     app.processEvents()
     
     ss_schemloaded = mw.grab()
-    ss_schemloaded.save("screenshots/schematic loaded.png")
+    ss_schemloaded.save("screenshots/schematic_loaded.png")
     
     highlight_widget(ss_schemloaded, mw.ui.writeSchematicButton)
     ss_schemloaded.save("screenshots/mainwindow_commitschematicbutton.png")

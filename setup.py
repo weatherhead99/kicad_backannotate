@@ -25,10 +25,16 @@ Created on Fri Jan 12 06:18:23 2018
 
 from setuptools import setup, find_packages
 
+
+name="kicad_backannotate"
+version="0.1"
+release="0.0.1"
+
+
 setup(
-      name="kicad_backannotate",
-      version="0.0.1",
-      packages=find_packages(exclude="test"),
+      name=name,
+      version=version,
+      packages=find_packages(exclude=["test","doc"]),
       license = "GPL-3.0-or-later", 
       url= "https://github.com/weatherhead99/kicad_backannotate", 
       author="Dan Weatherill", 
@@ -37,6 +43,6 @@ setup(
             "gui_scripts": [ 
             "kicad_backannotate_gui = kicad_backannotate.gui.kicad_backannotate_gui.main"]}, 
         test_suite="kicad_backannotate.test", 
-        package_data = { "kicad_backannotate.test_data" : ["example_projects/backannotate_project/backannotate_project.kicad_pcb"]}
-      
+        package_data = { "kicad_backannotate.test_data" : ["example_projects/backannotate_project/backannotate_project.kicad_pcb"]
+        },
       )
