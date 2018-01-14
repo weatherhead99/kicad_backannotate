@@ -27,9 +27,13 @@ Documentation, License etc.
 import pcbnew
 import re
 import operator
-
+from types import MethodType
+from .kicad_compat import KicadCompatMeta
 
 class BoardRemapper(object):
+    __metaclass__ = KicadCompatMeta
+    _kicad_compat_fixes = ["pcbnew"]
+    
     def __init__(self,boardfile=None):  
         
         if boardfile is None:
@@ -38,7 +42,9 @@ class BoardRemapper(object):
                 raise RuntimeError("couldn't get pcbnew board. Perhaps it is not running?")
         else:
             self._board = pcbnew.LoadBoard(boardfile)
+        
         self._load_original_board_geometry(lambda m : m.GetCenter())
+
     
     def _load_original_board_geometry(self,locfun):
         self._boardlocations = {}
@@ -49,7 +55,7 @@ class BoardRemapper(object):
         for mod in modules:
             centre = locfun(mod)
             tstamp = mod.GetTimeStamp()
-            libitem = mod.GetFPID().GetLibItemName()
+            libitem = self._get_libitem(mod.GetFPID())
             modtype, modnumber = _parse_reference(mod.GetReference())
             del mod
             if modtype is not None:
@@ -167,3 +173,7 @@ if __name__ == "__main__":
     
     remap = ba.get_remapping(sort_by_y_then_x)
     stremap = string_remapping(remap)
+
+
+
+        
