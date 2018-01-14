@@ -1,0 +1,3 @@
+include COPYING
+recursive-include kicad_backannotate/test *.py *.sch *.pro *.kicad_pcb
+recursive-include kicad_backannotate/doc *.py *.rst *.png
