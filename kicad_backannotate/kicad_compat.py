@@ -25,15 +25,14 @@ class KicadCompatMeta(type):
         instance = super(KicadCompatMeta,cls).__new__(cls,name,bases,dct)
         if "pcbnew" in instance._kicad_compat_fixes:
             print("applying pcbnew related compat patches")
-            setattr(instance,"_get_libitem",
-                    KicadCompatMeta.compat_libitem_func(instance))
-
+            instance._get_libitem = KicadCompatMeta.compat_libitem_func(instance)
+         
         return instance
 
     @staticmethod
     def compat_libitem_func(instance):
         test_obj = pcbnew.FPID()
         if not hasattr(test_obj,"GetLibItemName"):
-            return lambda self,x : MethodType(x.GetFootprintName,instance)
+            return MethodType(lambda self,x : x.GetFootprintName(),instance)
         else:
-            return lambda self,x : MethodType(x.GetLibItemName,instance)
+            return MethodType(lambda self,x : x.GetLibItemName(),instance)
