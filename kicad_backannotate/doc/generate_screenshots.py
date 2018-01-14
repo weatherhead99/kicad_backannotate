@@ -26,7 +26,7 @@ def highlight_widget(pixmap, widget):
     box  = get_widget_bbox(widget)
     draw_rect(pixmap, box)
 
-if __name__ == "__main__":
+def main():
     try:
         os.mkdir("screenshots")
     except OSError:
@@ -75,3 +75,6 @@ if __name__ == "__main__":
     
     highlight_widget(ss_schemloaded, mw.ui.writeSchematicButton)
     ss_schemloaded.save("screenshots/mainwindow_commitschematicbutton.png")
+
+if __name__ == "__main__":
+    main()

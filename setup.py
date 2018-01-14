@@ -23,12 +23,29 @@ Created on Fri Jan 12 06:18:23 2018
 
 
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Command
 
+import os
+from kicad_backannotate.doc.generate_screenshots import main
 
 name="kicad_backannotate"
 version="0.1"
 release="0.0.1"
+
+
+class ScreenshotsCommand(Command):
+    user_options = []
+    def initialize_options(self):
+        pass
+    def finalize_options(self):
+        pass
+    def run(self):
+        print("building screenshots...")
+        curdir = os.path.abspath(os.curdir)
+        os.chdir("kicad_backannotate/doc")
+        main()
+        os.chdir(curdir)
+    
 
 
 setup(
@@ -41,7 +58,8 @@ setup(
       author_email="plasteredparrot@gmail.com", 
       entry_points={
             "gui_scripts": [ 
-            "kicad_backannotate_gui = kicad_backannotate.gui.kicad_backannotate_gui.main"]}, 
+            "kicad_backannotate_gui = kicad_backannotate.gui.kicad_backannotate_gui.main"]},
+      cmdclass = {"screenshots" : ScreenshotsCommand},
         test_suite="kicad_backannotate.test", 
         package_data = { "kicad_backannotate.test_data" : ["example_projects/backannotate_project/backannotate_project.kicad_pcb"]
         },
