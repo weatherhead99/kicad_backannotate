@@ -29,8 +29,8 @@ import os
 from kicad_backannotate.doc.generate_screenshots import main
 
 name="kicad_backannotate"
-version="0.1"
-release="0.0.1"
+version="0.0.1dev1"
+release="0.0.1dev1"
 
 
 class ScreenshotsCommand(Command):
