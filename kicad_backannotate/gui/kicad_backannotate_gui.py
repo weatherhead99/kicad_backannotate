@@ -83,7 +83,7 @@ class BackAnnotateMainWindow(QMainWindow):
         
         self.ui.remapView.setModel(self._model)
         self.ui.remapView.selectionModel().currentChanged.connect(self.componentSelected)
-
+        self.ui.remapView.setSortingEnabled(True)
         
         self.settings.setValue("lastVisitedDir",os.path.dirname(filename))
         self.ui.sortOrder.currentIndexChanged.connect(self._model.resortdata)

@@ -34,7 +34,7 @@ sys.path.append("/home/danw/Software/kicad_backannotate/")
 import pcbnew
 print("pcbnew: %s" % pcbnew.__file__)
 
-from kicad_backannotate.board_remap import BoardRemapper,sort_by_x_then_y, sorted_string_remapping, sort_by_y_then_x
+from kicad_backannotate.board_remap import BoardRemapper,sort_by_x_then_y, sorted_string_remapping, sort_by_y_then_x, string_remapping
 
 
 class RemapTable(QAbstractTableModel):
@@ -133,4 +133,22 @@ class RemapTable(QAbstractTableModel):
                  "libid" : libid}
         
         return props
-            
+
+    def sort(self,column,sortorder):
+
+        if column == 0:
+            self.beginResetModel()
+            self._oldvals = sorted(self._oldvals)
+            if sortorder == Qt.DescendingOrder:
+                self._oldvals = self._oldvals[::-1]
+            stremap = string_remapping(self.remap)
+            self._newvals = [stremap[_] for _ in self._oldvals]
+            self.endResetModel()
+
+        elif column == 1:
+            self.beginResetModel()
+            self._newvals = sorted(self._newvals)
+            if sortorder == Qt.DescendingOrder:
+                self._newvals = self._newvals[::-1]
+            stremap = {v:k for k,v in string_remapping(self.remap).items()}
+            self._oldvals = [stremap[_] for _ in self._newvals]
