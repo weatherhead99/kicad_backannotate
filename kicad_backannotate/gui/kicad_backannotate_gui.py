@@ -24,7 +24,7 @@ Created on Fri Jan 12 06:28:53 2018
 
 from .Ui_main import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog,  QInputDialog
-from PyQt5.QtCore import QSettings
+from PyQt5.QtCore import QSettings, QSortFilterProxyModel
 import sys
 import os
 from .model import RemapTable
@@ -80,8 +80,11 @@ class BackAnnotateMainWindow(QMainWindow):
         
         self._model = RemapTable(filename,self.ui.sortOrder.currentIndex(),
                                  self.style())
-        
-        self.ui.remapView.setModel(self._model)
+
+
+        self._filterproxy = QSortFilterProxyModel()
+        self._filterproxy.setSourceModel(self._model)
+        self.ui.remapView.setModel(self._filterproxy)
         self.ui.remapView.selectionModel().currentChanged.connect(self.componentSelected)
         self.ui.remapView.setSortingEnabled(True)
         
