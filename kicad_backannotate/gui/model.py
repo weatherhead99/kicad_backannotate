@@ -51,6 +51,8 @@ class RemapTable(QAbstractTableModel):
         else:
             sortfun = sort_by_y_then_x
         self.remap = self._remapper.get_remapping(sortfun)
+        self.stremap = string_remapping(self.remap)
+        self.reverse_lookup = {v:k for k,v in self.stremap.items()}
         self._oldvals, self._newvals = sorted_string_remapping(self.remap)
         self.endResetModel()
 
@@ -135,20 +137,15 @@ class RemapTable(QAbstractTableModel):
         return props
 
     def sort(self,column,sortorder):
-
+        rev = True if sortorder == Qt.DescendingOrder else False
         if column == 0:
             self.beginResetModel()
-            self._oldvals = sorted(self._oldvals)
-            if sortorder == Qt.DescendingOrder:
-                self._oldvals = self._oldvals[::-1]
-            stremap = string_remapping(self.remap)
-            self._newvals = [stremap[_] for _ in self._oldvals]
+            self._oldvals = sorted(self._oldvals,reverse=rev)
+            self._newvals = [self.stremap[_] for _ in self._oldvals]
             self.endResetModel()
 
         elif column == 1:
             self.beginResetModel()
-            self._newvals = sorted(self._newvals)
-            if sortorder == Qt.DescendingOrder:
-                self._newvals = self._newvals[::-1]
-            stremap = {v:k for k,v in string_remapping(self.remap).items()}
-            self._oldvals = [stremap[_] for _ in self._newvals]
+            self._newvals = sorted(self._newvals,reverse=rev)
+            self._oldvals = [self.reverse_lookup[_] for _ in self._newvals]
+            self.endResetModel()
