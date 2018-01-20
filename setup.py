@@ -56,6 +56,7 @@ setup(
       url= "https://github.com/weatherhead99/kicad_backannotate", 
       author="Dan Weatherill", 
       author_email="plasteredparrot@gmail.com", 
+      description="A back-annotation tool for Kicad EDA",
       entry_points={
             "gui_scripts": [ 
             "kicad_backannotate_gui = kicad_backannotate.gui.kicad_backannotate_gui:main"]},
@@ -63,4 +64,16 @@ setup(
         test_suite="kicad_backannotate.test", 
         package_data = { "kicad_backannotate.test_data" : ["example_projects/backannotate_project/backannotate_project.kicad_pcb"]
         },
+      python_requires = "<3",
+      classifiers = [
+              "Development Status :: 4 - Beta",
+              "Environment :: X11 Applications :: Qt",
+              "Environment :: Win32 (MS Windows)",
+              "Environment :: MacOS X",
+              "Intended Audience :: End Users/Desktop",
+              "Intended Audience :: Manufacturing",
+              "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+              "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+              "Programming Language :: Python :: 2 :: Only"]
+      
       )
