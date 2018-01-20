@@ -31,7 +31,11 @@ class KicadCompatMeta(type):
 
     @staticmethod
     def compat_libitem_func(instance):
-        test_obj = pcbnew.FPID()
+        try:
+            test_obj = pcbnew.FPID()
+        except AttributeError:
+            test_obj = pcbnew.LIB_ID()
+            
         if not hasattr(test_obj,"GetLibItemName"):
             return MethodType(lambda self,x : x.GetFootprintName(),instance)
         else:
